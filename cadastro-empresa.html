@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadastro de empresa - Stuo</title>
+<style>
+  :root {
+    --navy: #060F30;
+    --green: #3CB54A;
+    --bg: #F4F5F7;
+    --card: #FFFFFF;
+    --text-primary: #16182B;
+    --text-secondary: #5A5D72;
+    --text-muted: #8B8EA0;
+    --border: #E2E4EA;
+    --danger: #C0362C;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: var(--text-primary); }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 24px 16px 64px; }
+  .header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--green); }
+  h1 { font-size: 20px; font-weight: 500; margin: 0; color: var(--navy); }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; overflow-x: auto; }
+  .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 24px; overflow-x: auto; }
+  .tab { flex: 1; min-width: 110px; padding: 10px 6px; font-size: 13px; border: none; background: none; cursor: pointer; border-bottom: 2px solid transparent; color: var(--text-muted); white-space: nowrap; }
+  .tab.active { border-bottom-color: var(--green); color: var(--navy); font-weight: 500; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px; }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  label { font-size: 13px; color: var(--text-secondary); }
+  input, select, textarea { height: 38px; padding: 0 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text-primary); font-size: 14px; font-family: inherit; }
+  textarea { height: auto; padding: 8px 10px; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--green); }
+  .section-title { font-size: 14px; font-weight: 500; margin: 24px 0 12px; color: var(--text-primary); }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .nav { display: flex; justify-content: space-between; margin-top: 28px; }
+  button.btn { height: 40px; padding: 0 18px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text-primary); font-size: 14px; cursor: pointer; }
+  button.btn:hover { background: var(--bg); }
+  button.primary { background: var(--green); border-color: var(--green); color: #06210B; font-weight: 500; }
+  button.primary:disabled { opacity: 0.6; cursor: default; }
+  .err { display: none; font-size: 13px; color: var(--danger); margin-bottom: 16px; }
+  .navgroup { display: flex; gap: 8px; }
+  .success { display: none; text-align: center; padding: 40px 16px; }
+  .checkline { display: flex; align-items: center; gap: 6px; }
+  .checkline input { width: auto; height: auto; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header"><span class="dot"></span><h1>Cadastro de empresa</h1></div>
+  <div class="card">
+    <div id="formArea">
+      <div class="tabs" id="tabs"></div>
+      <div class="err" id="err"></div>
+
+      <div class="panel active" data-step="0">
+        <div class="grid">
+          <div class="field"><label>Razão social *</label><input id="razaoSocial" data-req="1"></div>
+          <div class="field"><label>Nome fantasia *</label><input id="nomeFantasia" data-req="1"></div>
+          <div class="field"><label>CNPJ *</label><input id="cnpj" data-req="1" placeholder="00.000.000/0000-00"></div>
+          <div class="field"><label>Inscrição estadual *</label>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <input id="inscricaoEstadual" data-req="1" style="flex:1;">
+              <label class="checkline"><input type="checkbox" id="isento">Isento</label>
+            </div>
+          </div>
+          <div class="field"><label>Inscrição municipal</label><input id="inscricaoMunicipal"></div>
+          <div class="field"><label>CEP *</label><input id="cepEmpresa" data-req="1" placeholder="00000-000"></div>
+          <div class="field"><label>Endereço *</label><input id="enderecoEmpresa" data-req="1"></div>
+          <div class="row2">
+            <div class="field"><label>Número *</label><input id="numeroEmpresa" data-req="1"></div>
+            <div class="field"><label>Complemento</label><input id="complementoEmpresa"></div>
+          </div>
+          <div class="field"><label>Bairro *</label><input id="bairroEmpresa" data-req="1"></div>
+          <div class="row2">
+            <div class="field"><label>Cidade *</label><input id="cidadeEmpresa" data-req="1"></div>
+            <div class="field"><label>Estado *</label>
+              <select id="estadoEmpresa" data-req="1"><option value="">Selecione</option><option>AC</option><option>AL</option><option>AP</option><option>AM</option><option>BA</option><option>CE</option><option>DF</option><option>ES</option><option>GO</option><option>MA</option><option>MT</option><option>MS</option><option>MG</option><option>PA</option><option>PB</option><option>PR</option><option>PE</option><option>PI</option><option>RJ</option><option>RN</option><option>RS</option><option>RO</option><option>RR</option><option>SC</option><option>SP</option><option>SE</option><option>TO</option></select>
+            </div>
+          </div>
+          <div class="field"><label>Porte *</label><select id="porte" data-req="1"><option value="">Selecione</option><option>Pequeno</option><option>Médio</option><option>Grande</option></select></div>
+          <div class="field"><label>Telefone comercial *</label>
+            <div class="row2"><input id="dddEmpresa" data-req="1" placeholder="DDD"><input id="telEmpresa" data-req="1" placeholder="Telefone"></div>
+          </div>
+          <div class="field"><label>Segmento e/ou setor *</label><input id="segmento" data-req="1"></div>
+          <div class="field"><label>Categoria *</label><input id="categoria" data-req="1"></div>
+        </div>
+      </div>
+
+      <div class="panel" data-step="1">
+        <div class="grid">
+          <div class="field"><label>Nome do gestor *</label><input id="nomeGestor" data-req="1"></div>
+          <div class="field"><label>Cargo</label><input id="cargoGestor"></div>
+          <div class="field"><label>E-mail do gestor *</label><input id="emailGestor" data-req="1" type="email"></div>
+          <div class="field"><label>Telefone do gestor *</label><input id="telGestor" data-req="1"></div>
+        </div>
+      </div>
+
+      <div class="panel" data-step="2">
+        <div class="section-title">Informações do faturamento</div>
+        <div class="grid">
+          <div class="field"><label>CEP *</label><input id="cepFat" data-req="1"></div>
+          <div class="field"><label>Endereço *</label><input id="enderecoFat" data-req="1"></div>
+          <div class="row2">
+            <div class="field"><label>Número *</label><input id="numeroFat" data-req="1"></div>
+            <div class="field"><label>Complemento</label><input id="complementoFat"></div>
+          </div>
+          <div class="field"><label>Bairro *</label><input id="bairroFat" data-req="1"></div>
+          <div class="field"><label>Cidade *</label><input id="cidadeFat" data-req="1"></div>
+          <div class="field"><label>Estado *</label>
+            <select id="estadoFat" data-req="1"><option value="">Selecione</option><option>AC</option><option>AL</option><option>AP</option><option>AM</option><option>BA</option><option>CE</option><option>DF</option><option>ES</option><option>GO</option><option>MA</option><option>MT</option><option>MS</option><option>MG</option><option>PA</option><option>PB</option><option>PR</option><option>PE</option><option>PI</option><option>RJ</option><option>RN</option><option>RS</option><option>RO</option><option>RR</option><option>SC</option><option>SP</option><option>SE</option><option>TO</option></select>
+          </div>
+        </div>
+        <div class="section-title">Responsáveis</div>
+        <div class="grid">
+          <div class="field"><label>Responsável pelo faturamento *</label><input id="respFat" data-req="1"></div>
+          <div class="field"><label>E-mail do responsável *</label><input id="emailRespFat" data-req="1" type="email"></div>
+          <div class="field"><label>Telefone do responsável *</label><input id="telRespFat" data-req="1"></div>
+          <div class="field"><label>2º responsável</label><input id="resp2Fat"></div>
+          <div class="field"><label>E-mail do 2º responsável</label><input id="email2RespFat" type="email"></div>
+          <div class="field"><label>Telefone do 2º responsável</label><input id="tel2RespFat"></div>
+        </div>
+      </div>
+
+      <div class="nav">
+        <button class="btn" id="btnBack" style="visibility:hidden;">Voltar</button>
+        <div class="navgroup">
+          <button class="btn" id="btnNext">Avançar</button>
+          <button class="btn primary" id="btnSubmit" style="display:none;">Enviar cadastro</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="success" id="successArea">
+      <h2 style="font-weight:500;">Cadastro enviado</h2>
+      <p style="color:var(--text-secondary);" id="successMsg">Os dados foram enviados. Obrigado!</p>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ==== COLE AQUI A URL DO SEU GOOGLE APPS SCRIPT WEB APP ==== */
+var SCRIPT_URL = "COLE_AQUI_A_URL_DO_APPS_SCRIPT";
+
+var STEP_LABELS = ['1. Empresa','2. Gestor','3. Faturamento'];
+var total = 3;
+var cur = 0;
+var tabsEl = document.getElementById('tabs');
+var panels = document.querySelectorAll('.panel');
+var btnBack = document.getElementById('btnBack');
+var btnNext = document.getElementById('btnNext');
+var btnSubmit = document.getElementById('btnSubmit');
+var errBox = document.getElementById('err');
+
+STEP_LABELS.forEach(function(label, i){
+  var b = document.createElement('button');
+  b.className = 'tab' + (i===0 ? ' active' : '');
+  b.textContent = label;
+  b.dataset.step = i;
+  b.addEventListener('click', function(){ showStep(i); });
+  tabsEl.appendChild(b);
+});
+
+function showStep(i){
+  cur = i;
+  panels.forEach(function(p){ p.classList.toggle('active', Number(p.dataset.step)===i); });
+  Array.prototype.forEach.call(tabsEl.children, function(t){ t.classList.toggle('active', Number(t.dataset.step)===i); });
+  btnBack.style.visibility = i===0 ? 'hidden' : 'visible';
+  btnNext.style.display = i===total-1 ? 'none' : 'inline-block';
+  btnSubmit.style.display = i===total-1 ? 'inline-block' : 'none';
+  errBox.style.display = 'none';
+}
+
+btnNext.addEventListener('click', function(){ showStep(Math.min(cur+1, total-1)); });
+btnBack.addEventListener('click', function(){ showStep(Math.max(cur-1, 0)); });
+
+var FIELD_LABELS = {
+  razaoSocial:'Razão social', nomeFantasia:'Nome fantasia', cnpj:'CNPJ', inscricaoEstadual:'Inscrição estadual',
+  isento:'Isento de inscrição estadual', inscricaoMunicipal:'Inscrição municipal', cepEmpresa:'CEP', enderecoEmpresa:'Endereço',
+  numeroEmpresa:'Número', complementoEmpresa:'Complemento', bairroEmpresa:'Bairro', cidadeEmpresa:'Cidade', estadoEmpresa:'Estado',
+  porte:'Porte', dddEmpresa:'DDD', telEmpresa:'Telefone comercial', segmento:'Segmento e/ou setor', categoria:'Categoria',
+  nomeGestor:'Nome do gestor', cargoGestor:'Cargo', emailGestor:'E-mail do gestor', telGestor:'Telefone do gestor',
+  cepFat:'CEP (faturamento)', enderecoFat:'Endereço (faturamento)', numeroFat:'Número', complementoFat:'Complemento',
+  bairroFat:'Bairro', cidadeFat:'Cidade', estadoFat:'Estado', respFat:'Responsável pelo faturamento',
+  emailRespFat:'E-mail do responsável', telRespFat:'Telefone do responsável', resp2Fat:'2º responsável',
+  email2RespFat:'E-mail do 2º responsável', tel2RespFat:'Telefone do 2º responsável'
+};
+var STEP_FIELDS = [
+  ['razaoSocial','nomeFantasia','cnpj','inscricaoEstadual','isento','inscricaoMunicipal','cepEmpresa','enderecoEmpresa','numeroEmpresa','complementoEmpresa','bairroEmpresa','cidadeEmpresa','estadoEmpresa','porte','dddEmpresa','telEmpresa','segmento','categoria'],
+  ['nomeGestor','cargoGestor','emailGestor','telGestor'],
+  ['cepFat','enderecoFat','numeroFat','complementoFat','bairroFat','cidadeFat','estadoFat','respFat','emailRespFat','telRespFat','resp2Fat','email2RespFat','tel2RespFat']
+];
+
+function collectData(){
+  var data = {};
+  Object.keys(FIELD_LABELS).forEach(function(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    data[id] = el.type === 'checkbox' ? el.checked : el.value.trim();
+  });
+  data.dataEnvio = new Date().toISOString();
+  return data;
+}
+
+function findFirstMissing(){
+  for (var s=0; s<STEP_FIELDS.length; s++){
+    var panel = document.querySelector('.panel[data-step="'+s+'"]');
+    var reqs = panel.querySelectorAll('[data-req="1"]');
+    for (var k=0;k<reqs.length;k++){
+      if (!reqs[k].value || !reqs[k].value.trim()) return {step:s, el:reqs[k]};
+    }
+  }
+  return null;
+}
+
+btnSubmit.addEventListener('click', function(){
+  var missing = findFirstMissing();
+  if (missing){
+    showStep(missing.step);
+    errBox.textContent = 'Preencha todos os campos obrigatórios (*) antes de enviar.';
+    errBox.style.display = 'block';
+    missing.el.focus();
+    return;
+  }
+
+  var data = collectData();
+  btnSubmit.disabled = true;
+  btnSubmit.textContent = 'Enviando...';
+
+  if (!SCRIPT_URL || SCRIPT_URL.indexOf('COLE_AQUI') === 0){
+    console.warn('SCRIPT_URL não configurada — os dados não foram enviados para o Google Drive.');
+    finishSubmit(false);
+    return;
+  }
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: JSON.stringify(data)
+  }).then(function(){
+    finishSubmit(true);
+  }).catch(function(err){
+    console.error('Falha ao enviar para o Google Apps Script:', err);
+    finishSubmit(false);
+  });
+});
+
+function finishSubmit(ok){
+  document.getElementById('formArea').style.display = 'none';
+  document.getElementById('successArea').style.display = 'block';
+  document.getElementById('successMsg').textContent = ok
+    ? 'Os dados foram enviados e já estão disponíveis na planilha do Google Drive.'
+    : 'Não foi possível confirmar o envio automático. Copie os dados preenchidos e envie manualmente.';
+}
+</script>
+</body>
+</html>
